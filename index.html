@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Red social moderna e interactiva inspirada en X (Twitter). Crea posts, comparte fotos, videos, encuestas y conecta con otros usuarios. 100% JavaScript vanilla.">
+    <meta name="keywords" content="red social, JavaScript, HTML5, CSS3, localStorage, social media, Twitter clone">
+    <meta name="author" content="Lucía">
+    <meta name="theme-color" content="#1DA1F2">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SocialHub - Tu Red Social">
+    <meta property="og:description" content="Red social moderna con posts, fotos, videos, encuestas y mensajería. Sin backend, 100% cliente.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/1DA1F2/FFFFFF?text=SocialHub">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SocialHub - Tu Red Social">
+    <meta name="twitter:description" content="Red social moderna e interactiva con JavaScript vanilla">
+    
+    <title>SocialHub - Tu Red Social</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="skip-link" href="#postsContainer">Saltar al contenido</a>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                SocialHub
+            </h1>
+            <button class="hamburger-menu" id="hamburgerMenu" aria-label="Menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="header-actions" id="headerActions">
+                <div class="stats-badges">
+                    <span class="badge" id="postCount">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span id="postCountNum">0</span>
+                    </span>
+                    <span class="badge" id="likesCount">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span id="likesCountNum">0</span>
+                    </span>
+                    <span class="badge" id="commentsCount">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span id="commentsCountNum">0</span>
+                    </span>
+                </div>
+                <button class="btn-icon" id="statsButton" aria-label="Estadísticas">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 3v18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M18 17V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13 17V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 17v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="btn-icon btn-notifications" id="notificationsButton" aria-label="Notificaciones">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+                <button class="btn-icon" id="messagesButton" aria-label="Mensajes">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <!-- Theme removed: always use light theme -->
+                <button class="btn-user" id="userButton" aria-label="Perfil de usuario">
+                    <span class="user-avatar" id="currentUserAvatar">👤</span>
+                    <span class="user-name" id="currentUserName">Usuario</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Search and Filter Bar -->
+            <section class="search-section">
+                <div class="search-bar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Buscar publicaciones..."
+                    />
+                    <button class="btn-clear-search" id="clearSearch" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                            <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="search-hint" aria-hidden="true">Ej.: <kbd>@María</kbd> <kbd>#arte</kbd> <kbd>from:2025-11-01</kbd></div>
+            </section>
+
+            <!-- New Post Section -->
+            <section class="new-post-section">
+                <div class="new-post-card">
+                    <div class="new-post-header">
+                        <div class="post-user-info">
+                            <span class="post-user-avatar" id="postUserAvatar">👤</span>
+                            <span class="post-user-name" id="postUserName">Usuario</span>
+                        </div>
+                    </div>
+                    <form id="postForm" class="post-form">
+                        <textarea 
+                            id="postContent" 
+                            class="post-textarea" 
+                            placeholder="¿Qué estás pensando?"
+                            maxlength="500"
+                            required
+                        ></textarea>
+                        
+                        <!-- Image Preview -->
+                        <div id="imagePreview" class="image-preview" style="display: none;">
+                            <img id="previewImg" src="" alt="Vista previa">
+                            <button type="button" class="btn-remove-image" id="removeImage" aria-label="Eliminar imagen">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="post-form-footer">
+                            <div class="post-form-actions">
+                                <input 
+                                    type="file" 
+                                    id="imageInput" 
+                                    accept="image/*" 
+                                    multiple
+                                    style="display: none;"
+                                />
+                                <button type="button" class="btn-icon-action" id="imageButton" aria-label="Agregar imágenes">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                                        <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+                                        <path d="M21 15L16 10L5 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span class="image-count" id="imageCount" style="display: none;"></span>
+                                </button>
+                                <button type="button" class="btn-icon-action" id="videoButton" aria-label="Agregar video">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M23 7l-7 5 7 5V7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn-icon-action" id="pollButton" aria-label="Crear encuesta">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="14" y="3" width="7" height="10" rx="1" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="14" y="17" width="7" height="4" rx="1" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </button>
+                                <span id="charCount" class="char-count">0/500</span>
+                            </div>
+                            <div class="post-buttons-group">
+                                <button type="button" class="btn-secondary" id="saveDraftBtn">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2"/>
+                                        <polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" stroke-width="2"/>
+                                        <polyline points="7 3 7 8 15 8" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    Borrador
+                                </button>
+                                <button type="button" class="btn-secondary" id="scheduleBtn">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                        <polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    Programar
+                                </button>
+                                <button type="submit" class="btn-primary">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Publicar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Video URL Modal -->
+                    <div id="videoModal" class="video-url-modal" style="display: none;">
+                        <div class="video-modal-content">
+                            <div class="picker-header">
+                                <h3>Agregar video</h3>
+                                <button type="button" class="btn-close-picker" id="closeVideoModal">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="video-input-container">
+                                <input type="url" id="videoUrlInput" placeholder="Pega la URL de YouTube o Vimeo..." class="video-url-input">
+                                <button type="button" id="addVideoBtn" class="btn-primary">Agregar</button>
+                            </div>
+                            <div id="videoPreviewContainer" style="display: none;">
+                                <div id="videoPreview"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Poll Creation Modal -->
+                    <div id="pollModal" class="poll-modal" style="display: none;">
+                        <div class="poll-modal-content">
+                            <div class="picker-header">
+                                <h3>Crear encuesta</h3>
+                                <button type="button" class="btn-close-picker" id="closePollModal">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="poll-input-container">
+                                <input type="text" id="pollQuestion" placeholder="¿Cuál es tu pregunta?" class="poll-question-input" maxlength="200">
+                                <div id="pollOptionsContainer" class="poll-options-container">
+                                    <input type="text" class="poll-option-input" placeholder="Opción 1" maxlength="100">
+                                    <input type="text" class="poll-option-input" placeholder="Opción 2" maxlength="100">
+                                </div>
+                                <button type="button" class="btn-add-option" id="addPollOption">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    Agregar opción
+                                </button>
+                                <button type="button" class="btn-primary" id="createPollBtn">Crear encuesta</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Schedule Modal -->
+                    <div id="scheduleModal" class="schedule-modal" style="display: none;">
+                        <div class="schedule-modal-content">
+                            <div class="picker-header">
+                                <h3>Programar publicación</h3>
+                                <button type="button" class="btn-close-picker" id="closeScheduleModal">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="schedule-input-container">
+                                <label for="scheduleDateTime">Fecha y hora:</label>
+                                <input type="datetime-local" id="scheduleDateTime" class="schedule-datetime-input">
+                                <button type="button" class="btn-primary" id="confirmScheduleBtn">Programar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drafts and Scheduled Section -->
+                    <div id="draftsSection" class="drafts-section" style="display: none;">
+                        <div class="drafts-header">
+                            <h3>Borradores y Programados</h3>
+                            <button class="btn-close-drafts" id="closeDraftsBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="drafts-tabs">
+                            <button class="draft-tab active" data-tab="drafts">Borradores (<span id="draftsCount">0</span>)</button>
+                            <button class="draft-tab" data-tab="scheduled">Programados (<span id="scheduledCount">0</span>)</button>
+                        </div>
+                        <div id="draftsContainer" class="drafts-container"></div>
+                        <div id="scheduledContainer" class="drafts-container" style="display: none;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading Overlay -->
+            <!-- Loading Progress Bar -->
+            <div id="loadingBar" class="loading-bar">
+                <div class="loading-bar-progress"></div>
+            </div>
+
+        <!-- Snackbar for undo on delete -->
+        <div id="undoSnackbar" class="snackbar" aria-live="polite" aria-atomic="true" style="display: none;">
+            <div class="snackbar-message">Publicación eliminada</div>
+            <button id="undoBtn" class="snackbar-undo">Deshacer</button>
+        </div>
+
+        <!-- Toast for short messages (share/copied) -->
+        <div id="toast" class="toast" aria-hidden="true"></div>
+
+            <!-- Posts Feed -->
+            <section class="posts-feed">
+                <h2 class="feed-title">Publicaciones recientes</h2>
+                <div class="filter-sort-bar">
+                    <button class="filter-btn active" data-filter="all">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px; vertical-align: middle;">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        Todos
+                    </button>
+                    <button class="filter-btn" data-filter="image">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px; vertical-align: middle;">
+                            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+                            <path d="M21 15L16 10L5 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Con imagen
+                    </button>
+                    <button class="filter-btn" data-filter="likes">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px; vertical-align: middle;">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        Más likes
+                    </button>
+                    <button class="filter-btn" data-filter="recent">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px; vertical-align: middle;">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Recientes
+                    </button>
+                    <button class="filter-btn" data-filter="saved">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px; vertical-align: middle;">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Guardados
+                    </button>
+                    <select class="sort-select" id="sortSelect">
+                        <option value="desc">📅 Recientes primero</option>
+                        <option value="asc">📅 Antiguos primero</option>
+                        <option value="likes">❤️ Más likes</option>
+                    </select>
+                </div>
+                <div id="postsContainer" class="posts-container">
+                    <!-- Posts will be dynamically inserted here -->
+                </div>
+                <div id="emptyState" class="empty-state">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="9" cy="9" r="1" fill="currentColor"/>
+                        <circle cx="15" cy="9" r="1" fill="currentColor"/>
+                    </svg>
+                    <h3>No hay publicaciones todavía</h3>
+                    <p>Sé el primero en compartir algo</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 SocialHub, usando HTML, CSS y JavaScript.</p>
+        </div>
+    </footer>
+
+    <!-- User Modal -->
+    <div class="modal user-modal" id="userModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="userModalTitle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="userModalTitle">Configurar Perfil</h2>
+                <button class="btn-close-modal" id="closeModal" aria-label="Cerrar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <div class="form-group">
+                        <label for="userNameInput">Nombre de usuario</label>
+                        <input 
+                            type="text" 
+                            id="userNameInput" 
+                            class="form-input" 
+                            placeholder="Ingresa tu nombre"
+                            maxlength="30"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label>Foto de perfil</label>
+                        <div class="profile-photo-section">
+                            <div class="profile-photo-preview">
+                                <div id="profilePhotoDisplay" class="profile-photo-display">
+                                    <span id="profilePhotoAvatar">👤</span>
+                                </div>
+                                <input 
+                                    type="file" 
+                                    id="profilePhotoInput" 
+                                    accept="image/*" 
+                                    style="display: none;"
+                                />
+                                <button type="button" class="btn-upload-photo" id="uploadPhotoBtn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/>
+                                        <circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    Subir Foto
+                                </button>
+                                <button type="button" class="btn-remove-photo" id="removePhotoBtn" style="display: none;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 6H5H21" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M19 6V20C19 21.1 18.1 22 17 22H7C5.9 22 5 21.1 5 20V6M8 6V4C8 2.9 8.9 2 10 2H14C15.1 2 16 2.9 16 4V6" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    Eliminar Foto
+                                </button>
+                            </div>
+                            <p class="photo-hint">O elige un avatar:</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="avatar-grid">
+                            <button type="button" class="avatar-option selected" data-avatar="👤" onclick="selectAvatar('👤')">👤</button>
+                            <button type="button" class="avatar-option" data-avatar="😀" onclick="selectAvatar('😀')">😀</button>
+                            <button type="button" class="avatar-option" data-avatar="🎨" onclick="selectAvatar('🎨')">🎨</button>
+                            <button type="button" class="avatar-option" data-avatar="🚀" onclick="selectAvatar('🚀')">🚀</button>
+                            <button type="button" class="avatar-option" data-avatar="🎮" onclick="selectAvatar('🎮')">🎮</button>
+                            <button type="button" class="avatar-option" data-avatar="🎵" onclick="selectAvatar('🎵')">🎵</button>
+                            <button type="button" class="avatar-option" data-avatar="⚡" onclick="selectAvatar('⚡')">⚡</button>
+                            <button type="button" class="avatar-option" data-avatar="🌟" onclick="selectAvatar('🌟')">🌟</button>
+                            <button type="button" class="avatar-option" data-avatar="🔥" onclick="selectAvatar('🔥')">🔥</button>
+                            <button type="button" class="avatar-option" data-avatar="💎" onclick="selectAvatar('💎')">💎</button>
+                            <button type="button" class="avatar-option" data-avatar="🎯" onclick="selectAvatar('🎯')">🎯</button>
+                            <button type="button" class="avatar-option" data-avatar="🌈" onclick="selectAvatar('🌈')">🌈</button>
+                        </div>
+                    </div>
+                    <div class="user-stats">
+                        <h3>Tus Estadísticas</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="userPostsCount">0</div>
+                                <div class="stat-label">Posts</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="userLikesCount">0</div>
+                                <div class="stat-label">Likes recibidos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="userCommentsCount">0</div>
+                                <div class="stat-label">Comentarios</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Post Modal -->
+    <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="editModalTitle">
+        <div class="modal-content edit-modal-content">
+            <div class="modal-header">
+                <h2 id="editModalTitle">Editar publicación</h2>
+                <button class="btn-close-modal" onclick="closeEditModal()" aria-label="Cerrar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editPostForm" onsubmit="saveEdit(event)">
+                    <div class="form-group">
+                        <label for="editPostContent">Contenido</label>
+                        <textarea id="editPostContent" class="form-input" rows="4" maxlength="500" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editVideoUrlInput">Video (URL de YouTube o Vimeo)</label>
+                        <input type="url" id="editVideoUrlInput" class="form-input" placeholder="Pega la URL de video...">
+                    </div>
+                    <div class="form-group">
+                        <label>Imágenes</label>
+                        <input type="file" id="editImageInput" accept="image/*" multiple style="display: none;">
+                        <div class="edit-image-actions">
+                            <button type="button" class="btn-primary" id="editAddImageBtn" onclick="document.getElementById('editImageInput').click()">Agregar imágenes</button>
+                        </div>
+                        <div id="editImagePreview" class="image-preview" style="display: none; margin-top: 0.75rem;"></div>
+                    </div>
+
+                    <div style="display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1rem;">
+                        <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
+                        <button type="submit" class="btn-primary">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Panel -->
+    <div id="notificationsPanel" class="notifications-panel">
+        <div class="notifications-header">
+            <h3>Notificaciones</h3>
+            <button class="btn-clear-all" id="clearAllNotifications" style="display: none;">Limpiar todo</button>
+        </div>
+        <div id="notificationsList" class="notifications-list">
+            <div class="empty-notifications">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p>No tienes notificaciones</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messages Modal -->
+    <div class="modal" id="messagesModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="messagesModalTitle">
+        <div class="modal-content messages-modal-content">
+            <div class="modal-header">
+                <h2 id="messagesModalTitle">Mensajes</h2>
+                <button class="btn-close-modal" id="closeMessages" aria-label="Cerrar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="messages-body">
+                <!-- Conversations List -->
+                <div class="conversations-panel">
+                    <button class="btn-primary btn-new-chat" id="newChatBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Nuevo Chat
+                    </button>
+                    <div id="conversationsList" class="conversations-list">
+                        <!-- Conversations will be rendered here -->
+                    </div>
+                </div>
+                
+                <!-- Chat View -->
+                <div id="chatView" class="chat-panel">
+                    <div id="chatHeader" class="chat-header">
+                        <!-- Chat header will be rendered here -->
+                    </div>
+                    <div id="messagesContainer" class="messages-container">
+                        <!-- Messages will be rendered here -->
+                    </div>
+                    <div id="typingIndicator" class="typing-indicator" style="display: none;">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </div>
+                    <form id="messageForm" class="message-form">
+                        <input 
+                            type="text" 
+                            id="messageInput" 
+                            class="message-input" 
+                            placeholder="Escribe un mensaje..."
+                            autocomplete="off"
+                            maxlength="500"
+                        />
+                        <button type="submit" class="btn-send-message">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Users List Overlay -->
+                <div id="usersList" class="users-list-overlay">
+                    <!-- Users list will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="deleteModalTitle">
+        <div class="modal-content delete-modal-content">
+            <div class="delete-modal-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2 class="delete-modal-title" id="deleteModalTitle">¿Eliminar publicación?</h2>
+            <p class="delete-modal-text">Esta acción no se puede deshacer. La publicación será eliminada permanentemente.</p>
+            <div class="delete-modal-actions">
+                <button class="btn-cancel" onclick="closeDeleteModal()">Cancelar</button>
+                <button class="btn-confirm-delete" onclick="confirmDelete()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M19 6V20C19 21.1046 18.1046 22 17 22H7C5.89543 22 5 21.1046 5 20V6M8 6V4C8 2.89543 8.89543 2 10 2H14C15.1046 2 16 2.89543 16 4V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div id="statsModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="statsModalTitle">
+        <div class="modal-content stats-modal-content">
+            <div class="modal-header">
+                <h2 id="statsModalTitle">📊 Estadísticas Avanzadas</h2>
+                <button class="btn-close" onclick="closeStatsModal()" aria-label="Cerrar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="stats-modal-body">
+                <!-- Summary Cards -->
+                <div class="stats-summary">
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalPosts">0</div>
+                            <div class="stat-label">Total Posts</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">❤️</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalLikes">0</div>
+                            <div class="stat-label">Total Likes</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💬</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalComments">0</div>
+                            <div class="stat-label">Total Comentarios</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalFollowers">0</div>
+                            <div class="stat-label">Seguidores</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Actividad Semanal</h3>
+                        <canvas id="weeklyActivityChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Crecimiento de Seguidores</h3>
+                        <canvas id="followersGrowthChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Distribución de Interacciones</h3>
+                        <canvas id="interactionsChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Posts por Categoría</h3>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
