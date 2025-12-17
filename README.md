@@ -5,7 +5,6 @@ Una Web Inspirada en la Red Social X (Todavía es Demo)
 
 Una red social moderna e interactiva inspirada en X (Twitter), desarrollada completamente con JavaScript vanilla, HTML5 y CSS3. Sin backend, toda la funcionalidad se ejecuta del lado del cliente utilizando localStorage.
 
-![SocialHub](https://via.placeholder.com/1200x400/1DA1F2/FFFFFF?text=SocialHub)
 
 ## ✨ Características Principales
 
