@@ -266,6 +266,7 @@ Las contribuciones son bienvenidas. Para cambios importantes:
 
 - GitHub: [@lucianomontesdeoca9-droid](https://github.com/lucianomontesdeoca9-droid)
 - Email: lucianomontesdeoca9@gmail.com
+- Visita la Web: https://lucianomontesdeoca9-droid.github.io/socialhub/
 
 ## Agradecimientos
 
